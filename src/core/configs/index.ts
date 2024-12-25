@@ -1,0 +1,6 @@
+export const APP_URL = process.env.NEXT_PUBLIC_APP_URL!;
+
+export const APPWRITE_ENDPOINT = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!;
+export const APPWRITE_PROJECT_ID = process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!;
+export const APPWRITE_DATABASE_ID =
+  process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!;
