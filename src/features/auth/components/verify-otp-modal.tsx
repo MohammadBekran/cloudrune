@@ -38,8 +38,7 @@ const VerifyOTPModal = ({ accountId }: { accountId: string }) => {
 
         setTimeout(() => redirect("/"), 2000);
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       setIsLoading(false);
 
       toast.error("Failed to verify OTP");

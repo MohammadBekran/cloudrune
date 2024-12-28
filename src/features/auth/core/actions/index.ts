@@ -10,7 +10,7 @@ import {
   APPWRITE_DATABASE_ID,
   APPWRITE_USERS_COLLECTION_ID,
 } from "@/core/configs";
-import { createAdminClient } from "@/lib/appwrite";
+import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { parseStringify } from "@/lib/utils";
 
 export const handleError = async ({
@@ -100,8 +100,6 @@ export const verifyOTP = async ({
   try {
     const { account } = await createAdminClient();
 
-    console.log({ accountId, password });
-
     const session = await account.createSession(accountId, password);
 
     (await cookies()).set(AUTH_COOKIE, session.secret, {
@@ -110,8 +108,6 @@ export const verifyOTP = async ({
       sameSite: true,
       secure: true,
     });
-
-    console.log(session.$id);
 
     return parseStringify({ sessionId: session.$id });
   } catch (error) {
@@ -145,5 +141,24 @@ export const signOut = async () => {
     handleError({ message: "Failed to sign out", error });
   } finally {
     redirect("/sign-in");
+  }
+};
+
+export const getCurrentUser = async () => {
+  try {
+    const { databases, account } = await createSessionClient();
+    const userAccount = await account.get();
+
+    const users = await databases.listDocuments(
+      APPWRITE_DATABASE_ID,
+      APPWRITE_USERS_COLLECTION_ID,
+      [Query.equal("accountId", userAccount.$id)]
+    );
+
+    if (users.total > 0) return parseStringify({ user: users.documents[0] });
+
+    return parseStringify({});
+  } catch (error) {
+    handleError({ message: "Failed to get the current user", error });
   }
 };

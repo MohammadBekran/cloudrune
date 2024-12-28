@@ -7,6 +7,7 @@ interface ILogoProps {
   width?: number;
   height?: number;
   fontSize?: number;
+  showText?: boolean;
 }
 
 const Logo = ({
@@ -14,6 +15,7 @@ const Logo = ({
   width = 100,
   height = 79,
   fontSize,
+  showText = true,
 }: ILogoProps) => {
   const logoUrl = white ? "/icons/white-logo.svg" : "/icons/logo.svg";
 
@@ -27,7 +29,7 @@ const Logo = ({
       style={{ fontSize }}
     >
       <Image src={logoUrl} alt="Logo" width={width} height={height} />
-      CloudRune
+      {showText && "CloudRune"}
     </div>
   );
 };

@@ -84,7 +84,7 @@ body {
   h4 {
     @apply text-[18px] font-medium leading-[20px];
   }
-  h5 {
+  .h5 {
     @apply text-base font-semibold leading-[24px];
   }
   .subtitle-1 {
