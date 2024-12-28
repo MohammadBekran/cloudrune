@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 
-import QueryProvider from "@/components/partials/providers/query-provider";
+import NuqsProvider from "@/components/partials/providers/nuqs-provider";
+import SonnerProvider from "@/components/partials/providers/sonner-provider";
 import { cn } from "@/lib/utils";
 
 import "./globals.css";
@@ -15,6 +16,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "CloudRune",
   description: "CloudRune - store management platform",
+  icons: {
+    icon: "/icons/logo.svg",
+  },
 };
 
 export default function RootLayout({
@@ -24,8 +28,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn("antialiased font-poppins", poppins.className)}>
-        <QueryProvider>{children}</QueryProvider>
+      <body
+        className={cn(
+          "antialiased font-poppins",
+          poppins.className,
+          poppins.variable
+        )}
+      >
+        <NuqsProvider>
+          {children}
+          <SonnerProvider />
+        </NuqsProvider>
       </body>
     </html>
   );

@@ -1,3 +1,5 @@
+import "server-only";
+
 import { Client, Account, Databases, Users } from "node-appwrite";
 import { cookies } from "next/headers";
 
@@ -35,6 +37,9 @@ export const createAdminClient = async () => {
     .setKey(process.env.NEXT_APPWRITE_KEY!);
 
   return {
+    get databases() {
+      return new Databases(client);
+    },
     get account() {
       return new Account(client);
     },

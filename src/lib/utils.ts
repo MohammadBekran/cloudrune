@@ -4,3 +4,9 @@ import { twMerge } from "tailwind-merge";
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
+
+export const parseStringify = (value: unknown) => {
+  return JSON.parse(JSON.stringify(value));
+};
+
+export { toast } from "sonner";

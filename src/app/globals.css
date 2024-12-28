@@ -70,3 +70,80 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  h1 {
+    @apply text-[34px] font-bold leading-[42px];
+  }
+  .h2 {
+    @apply text-[24px] font-bold leading-[36px];
+  }
+  h3 {
+    @apply text-[20px] font-semibold leading-[28px];
+  }
+  h4 {
+    @apply text-[18px] font-medium leading-[20px];
+  }
+  h5 {
+    @apply text-base font-semibold leading-[24px];
+  }
+  .subtitle-1 {
+    @apply text-base font-medium leading-[24px];
+  }
+  .subtitle-2 {
+    @apply text-[14px] font-semibold leading-[20px];
+  }
+  .body-1 {
+    @apply text-[16px] font-normal leading-[24px];
+  }
+  .body-2 {
+    @apply text-[14px] font-normal leading-[20px];
+  }
+  .button {
+    @apply text-[14px] font-medium leading-[20px];
+  }
+  .caption {
+    @apply text-[12px] font-medium leading-[20px];
+  }
+  .overline {
+    @apply text-[10px] font-normal leading-[14px];
+  }
+
+  .container {
+    @apply max-w-7xl mx-auto px-5;
+  }
+  .primary-button {
+    @apply h-[66px] rounded-full button bg-brand transition-all hover:bg-brand-100 button !important;
+  }
+  .submit-button {
+    @apply h-12 rounded-full button bg-brand transition-all hover:bg-brand-100 button !important;
+  }
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+
+  /* Shadcn overrides */
+  .shad-no-focus {
+    @apply outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 !important;
+  }
+  .shad-input {
+    @apply p-0 border-none shadow-none body-2 placeholder:text-light-200 shad-no-focus !important;
+  }
+
+  .shad-form-item {
+    @apply h-[78px] flex flex-col justify-center rounded-xl px-4 border border-light-300 shadow-drop-1 !important;
+  }
+  .shad-form-label {
+    @apply w-full pt-2 text-light-100 body-2 !important;
+  }
+  .shad-form-message {
+    @apply text-red body-2 ml-2 !important;
+  }
+
+  .shad-otp {
+    @apply w-full flex justify-between gap-1 sm:gap-2 !important;
+  }
+  .shad-otp-slot {
+    @apply size-12 flex justify-center gap-5 rounded-xl text-[40px] font-medium text-brand-100 border-2 border-light-300 ring-brand shadow-drop-1 md:size-16 !important;
+  }
+}
