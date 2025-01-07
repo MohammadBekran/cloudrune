@@ -5,6 +5,18 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
 };
 
+export const handleError = ({
+  message,
+  error,
+}: {
+  message: string;
+  error: unknown;
+}) => {
+  console.error(message, error);
+
+  throw error;
+};
+
 export const parseStringify = (value: unknown) => {
   return JSON.parse(JSON.stringify(value));
 };

@@ -8,10 +8,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import VerifyOTPModal from "@/features/auth/components/verify-otp-modal";
-import { createAccount, signIn } from "@/features/auth/core/actions";
 import { useVerifyOTPModal } from "@/features/auth/core/hooks";
 import type { TAuthType } from "@/features/auth/core/types";
 import { authSchema } from "@/features/auth/core/validations";
+import {
+  useCreateAccount,
+  useSignIn,
+} from "@/features/auth/core/services/api/mutations.api";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -27,7 +30,6 @@ import { toast } from "@/lib/utils";
 
 const AuthForm = ({ authType }: { authType: TAuthType }) => {
   const [accountId, setAccountId] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
   const formSchema = authSchema({ authType });
   type TSignInFormData = z.infer<typeof formSchema>;
@@ -37,6 +39,9 @@ const AuthForm = ({ authType }: { authType: TAuthType }) => {
       email: "",
     },
   });
+  const { mutateAsync: signIn, isPending: isSigningInPending } = useSignIn();
+  const { mutateAsync: createAccount, isPending: isCreatingAccountPending } =
+    useCreateAccount();
   const { open } = useVerifyOTPModal();
 
   const isSignInPage = authType === "sign-in";
@@ -48,35 +53,31 @@ const AuthForm = ({ authType }: { authType: TAuthType }) => {
   const linkTitle = isSignInPage ? "Sign Up" : "Sign In";
   const linkPath = isSignInPage ? "/sign-up" : "/sign-in";
 
+  const isDisabled = isSigningInPending || isCreatingAccountPending;
+
   const onSubmit = async (values: TSignInFormData) => {
     const { email, fullName } = values;
 
-    setIsLoading(true);
-
-    try {
-      const account =
-        authType === "sign-up"
-          ? await createAccount({
+    const account =
+      authType === "sign-up"
+        ? await createAccount({
+            json: {
               email,
               fullName: fullName ?? "",
-            })
-          : await signIn({
+            },
+          })
+        : await signIn({
+            json: {
               email,
-            });
+            },
+          });
 
-      if (account.accountId) {
-        setAccountId(account.accountId);
-        open({ email });
+    if (account.accountId) {
+      setAccountId(account.accountId);
+      open({ email });
 
-        toast.success("Success");
-      } else toast.error(account.error);
-    } catch {
-      setIsLoading(false);
-
-      toast.error("Failed to perform this action");
-    } finally {
-      setIsLoading(false);
-    }
+      toast.success("Success");
+    } else toast.error("Failed to perform the action");
   };
 
   return (
@@ -131,11 +132,11 @@ const AuthForm = ({ authType }: { authType: TAuthType }) => {
             )}
             <Button
               type="submit"
-              disabled={isLoading}
+              disabled={isDisabled}
               className="w-full primary-button"
             >
               {buttonText}
-              {isLoading && (
+              {isDisabled && (
                 <Image
                   src="/icons/loader.svg"
                   alt="Loader"

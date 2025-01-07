@@ -1,6 +1,6 @@
 import Home from "@/features/home/components";
 
-const HomePage = () => {
+const HomePage = async () => {
   return <Home />;
 };
 

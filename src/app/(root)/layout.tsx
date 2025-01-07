@@ -1,18 +1,23 @@
-import { getCurrentUser } from "@/features/auth/core/actions";
+import { redirect } from "next/navigation";
+
+import { getCurrentUser } from "@/features/auth/core/queries";
 
 import Sidebar from "@/components/sidebar";
+import { protectRoute } from "@/core/actions";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const { user } = await getCurrentUser();
+  await protectRoute({ isLoggedIn: false, redirectUrl: "/sign-in" });
+
+  const user = await getCurrentUser();
+
+  if (!user) redirect("/sign-in");
+
+  const { avatar, fullName, email } = user;
 
   return (
     <main className="min-h-screen flex">
       <div>
-        <Sidebar
-          avatar={user.avatar}
-          fullName={user.fullName}
-          email={user.email}
-        />
+        <Sidebar avatar={avatar} fullName={fullName} email={email} />
       </div>
       <div>{children}</div>
     </main>
