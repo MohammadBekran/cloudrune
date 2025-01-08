@@ -4,15 +4,13 @@ import Link from "next/link";
 import Logo from "@/components/logo";
 import SidebarNavigation from "@/components/sidebar-navigation";
 
-const Sidebar = async ({
-  avatar,
-  fullName,
-  email,
-}: {
+interface ISidebarProps {
   avatar: string;
   fullName: string;
   email: string;
-}) => {
+}
+
+const Sidebar = async ({ avatar, fullName, email }: ISidebarProps) => {
   return (
     <div className="hidden overflow-auto w-[90px] min-h-screen flex-col justify-between py-7 px-5 sm:flex lg:w-[280px] xl:w-[325px]">
       <div>

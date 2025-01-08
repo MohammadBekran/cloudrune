@@ -36,7 +36,7 @@ type TSignInResponse = InferResponseType<
   200
 >;
 
-type TSignOutResponse = InferResponseType<
+type TLogOutResponse = InferResponseType<
   (typeof client.api.auth)["sign-out"]["$post"],
   200
 >;
@@ -143,26 +143,26 @@ export const useSignIn = () => {
   return mutation;
 };
 
-export const useSignOut = () => {
+export const useLogOut = () => {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<TSignOutResponse, Error>({
+  const mutation = useMutation<TLogOutResponse, Error>({
     mutationKey: ["sign-out"],
     mutationFn: async () => {
       const response = await client.api.auth["sign-out"]["$post"]();
 
-      if (!response.ok) throw new Error("Failed to sign out");
+      if (!response.ok) throw new Error("Failed to log out");
 
       return await response.json();
     },
     onSuccess: () => {
-      toast.success("Signed Out");
+      toast.success("Logged Out");
 
       queryClient.invalidateQueries({
         queryKey: ["current-user"],
       });
     },
-    onError: () => toast.error("Failed to sign out"),
+    onError: () => toast.error("Failed to log out"),
   });
 
   return mutation;

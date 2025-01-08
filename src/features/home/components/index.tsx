@@ -1,17 +1,17 @@
 "use client";
 
-import { useSignOut } from "@/features/auth/core/services/api/mutations.api";
+import { useLogOut } from "@/features/auth/core/services/api/mutations.api";
 
 import { Button } from "@/components/ui/button";
 
 const Home = () => {
-  const { mutate: signOut, isPending: isSigningOutPending } = useSignOut();
+  const { mutate: LogOut, isPending: isSigningOutPending } = useLogOut();
 
-  const handleSignOut = () => signOut();
+  const handleLogOut = () => LogOut();
 
   return (
-    <Button onClick={handleSignOut} disabled={isSigningOutPending}>
-      SignOut
+    <Button onClick={handleLogOut} disabled={isSigningOutPending}>
+      LogOut
     </Button>
   );
 };

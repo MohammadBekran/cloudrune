@@ -162,7 +162,7 @@ const app = new Hono()
 
       return c.json({ success: true });
     } catch {
-      return c.json({ error: "Failed to sign out" }, 400);
+      return c.json({ error: "Failed to log out" }, 400);
     }
   });
 

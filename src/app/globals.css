@@ -113,7 +113,7 @@ body {
     @apply max-w-7xl mx-auto px-5;
   }
   .primary-button {
-    @apply h-[66px] rounded-full button bg-brand transition-all hover:bg-brand-100 button !important;
+    @apply h-[66px] rounded-full button bg-brand transition-all hover:!bg-brand-100 button;
   }
   .submit-button {
     @apply h-12 rounded-full button bg-brand transition-all hover:bg-brand-100 button !important;
