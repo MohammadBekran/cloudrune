@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useGetFiles } from "@/features/files/core/services/api/queries.api";
 import FileActions from "@/features/fileType/components/file-actions";
 
-import Thumbnail from "@/components/thumbnail";
 import FormattedDateTime from "@/components/formatted-date-time";
+import Thumbnail from "@/components/thumbnail";
 
 const RecentFilesUploaded = () => {
   const { data: files, isLoading: isFilesLoading } = useGetFiles({
@@ -18,8 +18,8 @@ const RecentFilesUploaded = () => {
     <div className="h-full rounded-[20px] p-5 bg-white xl:p-8">
       <h2 className="h3 xl:h2 text-light-100">Recent files uploaded</h2>
       {isFilesLoading ? (
-        <div className="flex justify-center items-center">
-          <Loader2Icon className="size-5 text-muted-foreground" />
+        <div className="h-full flex justify-center items-center">
+          <Loader2Icon className="size-10 text-muted-foreground animate-spin" />
         </div>
       ) : (
         files &&
