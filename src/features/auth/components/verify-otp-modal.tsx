@@ -1,9 +1,13 @@
+import { REGEXP_ONLY_DIGITS } from "input-otp";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { sendEmailOTP, verifyOTP } from "@/features/auth/core/actions";
 import { useVerifyOTPModal } from "@/features/auth/core/hooks";
+import {
+  useSendEmailOTP,
+  useVerifyEmailOTP,
+} from "@/features/auth/core/services/api/mutations.api";
 
 import {
   AlertDialog,
@@ -15,55 +19,39 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPSlot } from "@/components/ui/input-otp";
-import { toast } from "@/lib/utils";
 
 const VerifyOTPModal = ({ accountId }: { accountId: string }) => {
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const { email, close } = useVerifyOTPModal();
+  const { mutate: verifyOTP, isPending: isVerifyingOTPPending } =
+    useVerifyEmailOTP();
+  const { mutate: sendEmailOTP, isPending: isSendingEmailOTPPending } =
+    useSendEmailOTP();
 
-  const isDisabled = password.length < 6 || isLoading;
+  const isDisabled =
+    password.length < 6 || isVerifyingOTPPending || isSendingEmailOTPPending;
+  const isPending = isVerifyingOTPPending || isSendingEmailOTPPending;
 
   const handleSubmit = async () => {
-    try {
-      setIsLoading(true);
-
-      const session = await verifyOTP({
-        accountId,
-        password,
-      });
-
-      if (!!session.sessionId) {
-        toast.success("OTP has been verified");
-
-        setTimeout(() => redirect("/"), 2000);
+    verifyOTP(
+      {
+        json: {
+          accountId,
+          password,
+        },
+      },
+      {
+        onSuccess: () => router.push("/"),
       }
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
-
-      toast.error("Failed to verify OTP");
-    } finally {
-      setIsLoading(false);
-    }
+    );
   };
 
   const handleResendOTP = async () => {
     if (email) {
-      setIsLoading(true);
-      try {
-        await sendEmailOTP({
-          email,
-        });
-
-        toast.success("OTP has been sent");
-      } catch {
-        setIsLoading(false);
-
-        toast.error("Failed to resend OTP");
-      } finally {
-        setIsLoading(false);
-      }
+      sendEmailOTP({
+        json: { email },
+      });
     }
   };
 
@@ -93,6 +81,7 @@ const VerifyOTPModal = ({ accountId }: { accountId: string }) => {
           maxLength={6}
           className="shad-otp"
           value={password}
+          pattern={REGEXP_ONLY_DIGITS}
           onChange={setPassword}
         >
           <InputOTPSlot index={0} className="shad-otp-slot" />
@@ -109,7 +98,7 @@ const VerifyOTPModal = ({ accountId }: { accountId: string }) => {
           onClick={handleSubmit}
         >
           Submit
-          {isLoading && (
+          {isPending && (
             <Image
               src="/icons/loader.svg"
               alt="Loader"
@@ -124,7 +113,7 @@ const VerifyOTPModal = ({ accountId }: { accountId: string }) => {
             Did&apos;t get a code?{" "}
             <Button
               variant="link"
-              disabled={isLoading}
+              disabled={isPending}
               className="pl-0 font-medium text-brand"
               onClick={handleResendOTP}
             >
