@@ -13,7 +13,6 @@ import {
 } from "@/core/configs";
 import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { sessionMiddleware } from "@/lib/hono";
-import { parseStringify } from "@/lib/utils";
 
 const app = new Hono()
   .get("/get-current-user", sessionMiddleware, async (c) => {
@@ -29,10 +28,9 @@ const app = new Hono()
         [Query.equal("accountId", userAccount.$id)]
       );
 
-      const userToReturn =
-        users.total > 0 ? { user: users.documents[0] } : { user: null };
+      const userToReturn = { user: users.documents[0] };
 
-      return parseStringify(userToReturn);
+      return c.json({ data: userToReturn });
     } catch {
       return c.json({ error: "Failed to find user" }, 400);
     }

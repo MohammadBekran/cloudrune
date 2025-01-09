@@ -34,6 +34,9 @@ const SidebarNavigation = () => {
                   alt="Navigation icon"
                   width={24}
                   height={24}
+                  className={cn("w-6 filter invert opacity-25", {
+                    "invert-0 opacity-100": isActive,
+                  })}
                 />
                 <span className="hidden lg:block">{label}</span>
               </Link>

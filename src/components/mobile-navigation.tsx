@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 import { useLogOut } from "@/features/auth/core/services/api/mutations.api";
 
@@ -35,14 +35,16 @@ const MobileNavigation = ({
   email,
 }: IMobileNavigationProps) => {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isOpenSheet, setIsOpenSheet] = useState(false);
   const { mutate: logOut } = useLogOut();
 
   const handleLogOut = () => logOut();
 
   return (
     <header className="h-[60px] flex justify-between items-center px-5 sm:hidden">
-      <Logo width={16} height={16} fontSize={16} />
-      <Sheet>
+      <Logo width={30} height={30} fontSize={20} />
+      <Sheet open={isOpenSheet} onOpenChange={setIsOpenSheet}>
         <SheetTrigger asChild>
           <Image
             src="/icons/menu.svg"
@@ -75,25 +77,30 @@ const MobileNavigation = ({
 
               const isActive = pathname === path;
 
+              const handleNavigationItemClick = () => {
+                router.push(path);
+
+                setIsOpenSheet(false);
+              };
+
               return (
                 <li
                   key={`${path}-${index}`}
                   className={cn(
-                    "h-[52px] flex items-center rounded-full cursor-pointer px-6 text-light-100 lg:justify-start lg:px-[30px] lg:rounded-full h5",
+                    "h-[52px] flex items-center gap-4 rounded-full cursor-pointer px-6 text-light-100 lg:justify-start lg:px-[30px] lg:rounded-full h5",
                     {
                       "shadow-drop-2 bg-brand text-white": isActive,
                     }
                   )}
+                  onClick={handleNavigationItemClick}
                 >
-                  <Link href={path} className="flex gap-4">
-                    <Image
-                      src={icon}
-                      alt="Navigation icon"
-                      width={24}
-                      height={24}
-                    />
-                    <span>{label}</span>
-                  </Link>
+                  <Image
+                    src={icon}
+                    alt="Navigation icon"
+                    width={24}
+                    height={24}
+                  />
+                  <span>{label}</span>
                 </li>
               );
             })}

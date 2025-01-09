@@ -23,21 +23,18 @@ const FileUploader = ({
   className,
 }: IFileUploaderProps) => {
   const [files, setFiles] = useState<File[]>([]);
-  const { mutateAsync: uploadFile } = useUploadFile();
+  const { mutateAsync: uploadFile } = useUploadFile({
+    onUploadFile: (fileName) =>
+      setFiles((prevFiles) =>
+        prevFiles.filter((file) => file.name !== fileName)
+      ),
+  });
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      setFiles(acceptedFiles);
-      console.log(acceptedFiles);
-
-      for (const file of acceptedFiles) {
-        console.log("Is file instance:", file instanceof File); // Should log `true`
-        console.log("File object:", file); // Ensure this logs the full `File` object
-      }
+      setFiles((prev) => [...prev, ...acceptedFiles]);
 
       const uploadPromises = acceptedFiles.map(async (file) => {
-        console.log(file instanceof File);
-
         if (file.size > MAX_FILE_SIZE) {
           setFiles((prevFiles) =>
             prevFiles?.filter((f) => f.name !== file.name)
@@ -46,24 +43,14 @@ const FileUploader = ({
           toast.error("File is too long");
         }
 
-        return await uploadFile(
-          {
-            form: {
-              ownerId,
-              accountId,
-              file,
-              path: "/",
-            },
+        return await uploadFile({
+          form: {
+            ownerId,
+            accountId,
+            file,
+            path: "/",
           },
-          {
-            onSuccess: ({ data }) => {
-              if (data)
-                setFiles((prevFiles) =>
-                  prevFiles?.filter((file) => file.name !== data.name)
-                );
-            },
-          }
-        );
+        });
       });
 
       await Promise.all(uploadPromises);

@@ -10,7 +10,7 @@ export const useGetCurrentUser = () => {
 
       if (!response.ok) return null;
 
-      return response;
+      return await response.json();
     },
   });
 

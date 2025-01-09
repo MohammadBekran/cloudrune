@@ -16,7 +16,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   const { $id, accountId, avatar, fullName, email } = user;
 
   return (
-    <main className="min-h-screen lg:flex">
+    <main className="min-h-screen sm:flex">
       <div>
         <Sidebar avatar={avatar} fullName={fullName} email={email} />
         <MobileNavigation
