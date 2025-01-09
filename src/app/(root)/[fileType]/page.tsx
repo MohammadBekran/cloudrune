@@ -8,7 +8,7 @@ import type { TFile } from "@/features/fileType/core/types";
 import { getFileTypesParams } from "@/lib/utils";
 
 interface IFileTypePageProps {
-  params: { fileType: string };
+  params: Promise<{ fileType: string }>;
 }
 
 export const generateMetadata = async ({
