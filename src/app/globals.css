@@ -151,6 +151,6 @@ body {
     @apply w-full max-w-7xl flex flex-col items-center gap-8 mx-auto;
   }
   .search-results-wrapper {
-    @apply absolute top-16 left-0 w-full space-y-3 rounded-[20px] p-4 bg-white;
+    @apply absolute z-50 top-16 left-0 w-full space-y-3 rounded-[20px] p-4 bg-white;
   }
 }
