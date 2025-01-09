@@ -30,9 +30,14 @@ const FileType = ({ type, types }: IFileTypeProps) => {
   });
 
   const fileType = type.split("s")[0] as TFileType;
+  const fileSize =
+    type === "media"
+      ? (summary?.data["video"]?.size ?? 0) +
+        (summary?.data["audio"]?.size ?? 0)
+      : summary?.data[fileType]?.size ?? 0;
 
   const filesSize = convertFileSize({
-    sizeInBytes: summary?.data[fileType].size ?? 0,
+    sizeInBytes: fileSize,
   });
 
   return (
