@@ -1,4 +1,4 @@
-import { Models } from "node-appwrite";
+import { Models } from "appwrite";
 
 import Thumbnail from "@/components/thumbnail";
 import FormattedDateTime from "@/components/formatted-date-time";

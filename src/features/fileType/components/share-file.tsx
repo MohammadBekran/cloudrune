@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Models } from "node-appwrite";
+import { Models } from "appwrite";
 
 import ImageThumbnail from "@/features/fileType/components/image-thumbnail";
 

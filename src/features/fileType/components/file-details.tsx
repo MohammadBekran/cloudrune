@@ -1,4 +1,4 @@
-import { Models } from "node-appwrite";
+import { Models } from "appwrite";
 
 import FileDetailRow from "@/features/fileType/components/file-detail-row";
 import ImageThumbnail from "@/features/fileType/components/image-thumbnail";

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { Models } from "node-appwrite";
+import { Models } from "appwrite";
 
 import FileDetails from "@/features/fileType/components/file-details";
 import ShareFile from "@/features/fileType/components/share-file";

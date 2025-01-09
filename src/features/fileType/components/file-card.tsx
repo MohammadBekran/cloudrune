@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Models } from "node-appwrite";
+import { Models } from "appwrite";
 
 import FileActions from "@/features/fileType/components/file-actions";
 

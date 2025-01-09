@@ -7,6 +7,8 @@ import MobileNavigation from "@/components/mobile-navigation";
 import { protectRoute } from "@/core/actions";
 import Header from "@/components/header";
 
+export const dynamic = "force-dynamic";
+
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   await protectRoute({ isLoggedIn: false, redirectUrl: "/sign-in" });
 
