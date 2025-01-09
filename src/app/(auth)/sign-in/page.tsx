@@ -4,6 +4,8 @@ import AuthForm from "@/features/auth/components/auth-form";
 
 import { protectRoute } from "@/core/actions";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Sign In",
   description:
