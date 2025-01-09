@@ -11,8 +11,10 @@ interface IFileTypePageProps {
   params: { fileType: string };
 }
 
-export const generateMetadata = ({ params }: IFileTypePageProps): Metadata => {
-  const fileType = params.fileType;
+export const generateMetadata = async ({
+  params,
+}: IFileTypePageProps): Promise<Metadata> => {
+  const { fileType } = await params;
 
   const type =
     fileType.charAt(0).toUpperCase() + fileType.slice(1).toLowerCase();
