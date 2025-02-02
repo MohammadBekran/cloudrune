@@ -133,7 +133,7 @@ export const convertFileToUrl = ({ file }: { file: File }) =>
   URL.createObjectURL(file);
 
 export const constructFileUrl = ({ fileId }: { fileId: string }) => {
-  return `${APPWRITE_ENDPOINT}/storage/buckets/${APPWRITE_BUCKET_ID}/files/${fileId}/preview?project=${APPWRITE_PROJECT_ID}`;
+  return `${APPWRITE_ENDPOINT}/storage/buckets/${APPWRITE_BUCKET_ID}/files/${fileId}/view?project=${APPWRITE_PROJECT_ID}`;
 };
 
 export const constructDownloadUrl = ({ fileId }: { fileId: string }) => {

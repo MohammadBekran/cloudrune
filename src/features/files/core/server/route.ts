@@ -266,7 +266,7 @@ const app = new Hono()
           APPWRITE_FILES_COLLECTION_ID,
           fileId,
           {
-            users: [...file.users, ...emails],
+            users: emails.length === 0 ? [] : [...file.users, ...emails],
           }
         );
 

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { useLogOut } from "@/features/auth/core/services/api/mutations.api";
+import { useGetSummary } from "@/features/files/core/services/api/queries.api";
 
 import FileUploader from "@/components/file-uploader";
 import Logo from "@/components/logo";
@@ -17,7 +18,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { SIDEBAR_NAVIGATION_ITEMS } from "@/core/constants";
-import { cn } from "@/lib/utils";
+import { cn, convertFileSize } from "@/lib/utils";
 
 interface IMobileNavigationProps {
   ownerId: string;
@@ -38,6 +39,11 @@ const MobileNavigation = ({
   const router = useRouter();
   const [isOpenSheet, setIsOpenSheet] = useState(false);
   const { mutate: logOut } = useLogOut();
+  const { data: summary } = useGetSummary();
+
+  const summaryUsed = summary?.data.used;
+  const isUserAccessToUpload =
+    summaryUsed && convertFileSize({ sizeInBytes: summaryUsed });
 
   const handleLogOut = () => logOut();
 
@@ -107,7 +113,9 @@ const MobileNavigation = ({
           </ul>
           <Separator className="my-4 bg-light-200/20" />
           <div className="flex flex-col justify-between gap-5 pb-5">
-            <FileUploader ownerId={ownerId} accountId={accountId} />
+            {isUserAccessToUpload && isUserAccessToUpload !== "2.0" && (
+              <FileUploader accountId={accountId} ownerId={ownerId} />
+            )}
             <Button
               type="submit"
               className="h5 h-[52px] rounded-full flex items-center gap-4 px-6 transition-all shadow-none bg-brand/10 text-brand hover:bg-brand/20"
