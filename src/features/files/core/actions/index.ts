@@ -7,6 +7,7 @@ import {
   APPWRITE_DATABASE_ID,
   APPWRITE_FILES_COLLECTION_ID,
 } from "@/core/configs";
+import { TWO_GIGABYTE_IN_BYTE } from "@/core/constants";
 
 export const getUserTotalSpaceUsed = async ({
   databases,
@@ -25,7 +26,7 @@ export const getUserTotalSpaceUsed = async ({
     audio: { size: 0, latestDate: "" },
     other: { size: 0, latestDate: "" },
     used: 0,
-    all: 2 * 1024 * 1024, // 2GB
+    all: TWO_GIGABYTE_IN_BYTE,
   };
 
   for (const file of files.documents) {

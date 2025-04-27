@@ -6,6 +6,7 @@ import {
   APPWRITE_ENDPOINT,
   APPWRITE_PROJECT_ID,
 } from "@/core/configs";
+import { TWO_GIGABYTE_IN_BYTE } from "@/core/constants";
 import type { ISizeInBytes } from "@/core/types";
 
 export const cn = (...inputs: ClassValue[]) => {
@@ -221,7 +222,7 @@ export const getFileTypesParams = ({ type }: { type: string }) => {
 export const convertSizeInBytesToPercentage = ({
   sizeInBytes,
 }: ISizeInBytes) => {
-  const totalSizeInBytes = 2 * 1024 * 1024; // 2GB
+  const totalSizeInBytes = TWO_GIGABYTE_IN_BYTE;
   const percentage = (sizeInBytes / totalSizeInBytes) * 100;
 
   return Number(percentage.toFixed(2));
