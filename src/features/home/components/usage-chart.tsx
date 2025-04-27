@@ -8,6 +8,8 @@ import {
   RadialBarChart,
 } from "recharts";
 
+import { USAGE_LIMIT_BY_GB } from "@/features/home/core/constants";
+
 import {
   Card,
   CardContent,
@@ -29,10 +31,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const UsageChart = ({ used = 0 }: { used: number }) => {
-  const percentage =
-    used &&
-    calculatePercentage({ sizeInBytes: used }) &&
-    calculatePercentage({ sizeInBytes: used }).toString().replace(/^\d+/, "");
+  const percentage = calculatePercentage({ sizeInBytes: used });
 
   const chartData = [
     {
@@ -103,7 +102,10 @@ const UsageChart = ({ used = 0 }: { used: number }) => {
           Available Storage
         </CardTitle>
         <CardDescription className="subtitle-1 w-full mt-2 text-white/70 md:text-center lg:text-left">
-          {used ? convertFileSize({ sizeInBytes: used }) : "2GB"} / 2GB
+          {used
+            ? convertFileSize({ sizeInBytes: used })
+            : `${USAGE_LIMIT_BY_GB}GB`}{" "}
+          / {USAGE_LIMIT_BY_GB}GB
         </CardDescription>
       </CardHeader>
     </Card>

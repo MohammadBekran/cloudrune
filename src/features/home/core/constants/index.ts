@@ -39,3 +39,5 @@ export const HOME_SUMMARY_CARD_ITEMS = ({
     },
   ];
 };
+
+export const USAGE_LIMIT_BY_GB = 2;

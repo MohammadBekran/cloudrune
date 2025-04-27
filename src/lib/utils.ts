@@ -6,6 +6,7 @@ import {
   APPWRITE_ENDPOINT,
   APPWRITE_PROJECT_ID,
 } from "@/core/configs";
+import type { ISizeInBytes } from "@/core/types";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -217,15 +218,23 @@ export const getFileTypesParams = ({ type }: { type: string }) => {
   }
 };
 
-export const calculatePercentage = ({
+export const convertSizeInBytesToPercentage = ({
   sizeInBytes,
-}: {
-  sizeInBytes: number;
-}) => {
+}: ISizeInBytes) => {
   const totalSizeInBytes = 2 * 1024 * 1024; // 2GB
   const percentage = (sizeInBytes / totalSizeInBytes) * 100;
 
   return Number(percentage.toFixed(2));
+};
+
+export const calculatePercentage = ({ sizeInBytes }: ISizeInBytes) => {
+  return (
+    sizeInBytes &&
+    convertSizeInBytesToPercentage({ sizeInBytes }) &&
+    convertSizeInBytesToPercentage({ sizeInBytes })
+      .toString()
+      .replace(/^\d+/, "")
+  );
 };
 
 export { toast } from "sonner";

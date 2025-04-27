@@ -5,11 +5,18 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 import { useUploadFile } from "@/features/files/core/services/api/mutations.api";
+import { useGetSummary } from "@/features/files/core/services/api/queries.api";
 
-import { Button } from "@/components/ui/button";
 import Thumbnail from "@/components/thumbnail";
-import { cn, convertFileToUrl, getFileType, toast } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { MAX_FILE_SIZE } from "@/core/constants";
+import {
+  cn,
+  convertFileSize,
+  convertFileToUrl,
+  getFileType,
+  toast,
+} from "@/lib/utils";
 
 interface IFileUploaderProps {
   ownerId: string;
@@ -23,12 +30,16 @@ const FileUploader = ({
   className,
 }: IFileUploaderProps) => {
   const [files, setFiles] = useState<File[]>([]);
+  const { data: summary } = useGetSummary();
   const { mutateAsync: uploadFile } = useUploadFile({
     onUploadFile: (fileName) =>
       setFiles((prevFiles) =>
         prevFiles.filter((file) => file.name !== fileName)
       ),
   });
+
+  const used = convertFileSize({ sizeInBytes: summary?.data?.used! });
+  const canUpload = used !== "2 GB";
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -80,6 +91,7 @@ const FileUploader = ({
           "primary-button !h-[52px] gap-2 px-10 shadow-drop-1",
           className
         )}
+        disabled={!canUpload}
       >
         <Image src="/icons/upload.svg" alt="Upload" width={24} height={24} />
         <p>Upload</p>

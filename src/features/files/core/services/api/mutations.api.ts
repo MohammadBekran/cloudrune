@@ -46,6 +46,7 @@ export const useUploadFile = ({
   const mutation = useMutation<TUploadFileResponse, Error, TUploadFileRequest>({
     mutationKey: ["upload-file"],
     mutationFn: async ({ form }) => {
+      console.log({ form });
       const response = await client.api.files["upload-file"]["$post"]({ form });
 
       if (!response.ok) throw new Error("Failed to upload the file");

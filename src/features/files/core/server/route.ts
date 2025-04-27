@@ -6,7 +6,7 @@ import { InputFile } from "node-appwrite/file";
 import { z } from "zod";
 
 import { getCurrentUser } from "@/features/auth/core/queries";
-import type { TFileType } from "@/features/fileType/core/types";
+import { getUserTotalSpaceUsed } from "@/features/files/core/actions";
 
 import {
   APPWRITE_BUCKET_ID,
@@ -14,7 +14,7 @@ import {
   APPWRITE_FILES_COLLECTION_ID,
 } from "@/core/configs";
 import { sessionMiddleware } from "@/lib/hono";
-import { constructFileUrl, getFileType } from "@/lib/utils";
+import { constructFileUrl, convertFileSize, getFileType } from "@/lib/utils";
 
 const app = new Hono()
   .get("/summary", sessionMiddleware, async (c) => {
@@ -24,33 +24,10 @@ const app = new Hono()
       const currentUser = await getCurrentUser();
       if (!currentUser) return c.json({ error: "Unauthorized" }, 400);
 
-      const files = await databases.listDocuments(
-        APPWRITE_DATABASE_ID,
-        APPWRITE_FILES_COLLECTION_ID,
-        [Query.equal("owner", [currentUser.$id])]
-      );
-
-      const totalSpace = {
-        image: { size: 0, latestDate: "" },
-        document: { size: 0, latestDate: "" },
-        video: { size: 0, latestDate: "" },
-        audio: { size: 0, latestDate: "" },
-        other: { size: 0, latestDate: "" },
-        used: 0,
-        all: 2 * 1024 * 1024, // 2GB
-      };
-
-      for (const file of files.documents) {
-        const fileType = file.type as TFileType;
-        const latestDate = totalSpace[fileType].latestDate;
-
-        totalSpace[fileType].size += file.size;
-        totalSpace.used += file.size;
-
-        if (!latestDate || new Date(file.$updatedAt) > new Date(latestDate)) {
-          totalSpace[fileType].latestDate = file.$updatedAt;
-        }
-      }
+      const totalSpace = await getUserTotalSpaceUsed({
+        databases,
+        currentUser,
+      });
 
       return c.json({ data: totalSpace });
     } catch {
@@ -80,7 +57,6 @@ const app = new Hono()
           limit,
         } = c.req.valid("json");
         const currentUser = await getCurrentUser();
-
         if (!currentUser) return c.json({ error: "Unauthorized" }, 400);
 
         const queries = [
@@ -133,6 +109,25 @@ const app = new Hono()
         const databases = c.get("databases");
         const storage = c.get("storage");
         const { file, ownerId, accountId, path } = c.req.valid("form");
+
+        const currentUser = await getCurrentUser();
+        if (!currentUser) return c.json({ error: "Unauthorized" }, 400);
+
+        const totalSpace = await getUserTotalSpaceUsed({
+          databases,
+          currentUser,
+        });
+        const used = convertFileSize({ sizeInBytes: totalSpace.used });
+        const canUpload = used !== "2 GB";
+
+        if (!canUpload) {
+          return c.json(
+            {
+              error: "You have used up your available storage space.",
+            },
+            400
+          );
+        }
 
         const inputFile = InputFile.fromBuffer(file, file.name);
 
