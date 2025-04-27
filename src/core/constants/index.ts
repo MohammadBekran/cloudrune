@@ -27,3 +27,5 @@ export const SIDEBAR_NAVIGATION_ITEMS = [
 ] as const;
 
 export const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+
+export const TWO_GIGABYTE_IN_BYTE = 2 * 1024 * 1024;

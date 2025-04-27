@@ -144,7 +144,7 @@ body {
     @apply w-full flex justify-between gap-1 sm:gap-2 !important;
   }
   .shad-otp-slot {
-    @apply size-12 flex justify-center gap-5 rounded-xl text-[40px] font-medium text-brand-100 border-2 border-light-300 ring-brand shadow-drop-1 md:size-16 !important;
+    @apply size-12 flex flex-grow justify-center gap-5 rounded-xl text-[40px] font-medium text-brand-100 border-2 border-light-300 ring-brand shadow-drop-1 md:size-16 !important;
   }
 
   .page-container {

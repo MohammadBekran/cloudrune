@@ -9,7 +9,7 @@ import { useGetSummary } from "@/features/files/core/services/api/queries.api";
 
 import Thumbnail from "@/components/thumbnail";
 import { Button } from "@/components/ui/button";
-import { MAX_FILE_SIZE } from "@/core/constants";
+import { MAX_FILE_SIZE, TWO_GIGABYTE_IN_BYTE } from "@/core/constants";
 import {
   cn,
   convertFileSize,
@@ -38,7 +38,9 @@ const FileUploader = ({
       ),
   });
 
-  const used = convertFileSize({ sizeInBytes: summary?.data?.used! });
+  const used = convertFileSize({
+    sizeInBytes: summary?.data?.used ?? TWO_GIGABYTE_IN_BYTE,
+  });
   const canUpload = used !== "2 GB";
 
   const onDrop = useCallback(
@@ -118,6 +120,7 @@ const FileUploader = ({
                         alt="Loader"
                         width={80}
                         height={26}
+                        className="mt-2"
                       />
                     </div>
                   </div>

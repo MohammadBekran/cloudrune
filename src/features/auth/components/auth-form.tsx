@@ -56,28 +56,32 @@ const AuthForm = ({ authType }: { authType: TAuthType }) => {
   const isDisabled = isSigningInPending || isCreatingAccountPending;
 
   const onSubmit = async (values: TSignInFormData) => {
-    const { email, fullName } = values;
+    try {
+      const { email, fullName } = values;
 
-    const account =
-      authType === "sign-up"
-        ? await createAccount({
-            json: {
-              email,
-              fullName: fullName ?? "",
-            },
-          })
-        : await signIn({
-            json: {
-              email,
-            },
-          });
+      const account =
+        authType === "sign-up"
+          ? await createAccount({
+              json: {
+                email,
+                fullName: fullName ?? "",
+              },
+            })
+          : await signIn({
+              json: {
+                email,
+              },
+            });
 
-    if (account.accountId) {
-      setAccountId(account.accountId);
-      open({ email });
+      if (account.accountId) {
+        setAccountId(account.accountId);
+        open({ email });
 
-      toast.success("Success");
-    } else toast.error("Failed to perform the action");
+        toast.success("Success");
+      } else toast.error("Failed to perform the action");
+    } catch {
+      console.log("Something went wrong");
+    }
   };
 
   return (
